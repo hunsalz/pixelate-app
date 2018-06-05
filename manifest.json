@@ -1,0 +1,7 @@
+{
+  "name": "pixelate-app",
+  "short_name": "pixelate-app",
+  "description": "Pixelate any image",
+  "start_url": "/",
+  "display": "standalone"
+}

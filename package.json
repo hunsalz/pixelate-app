@@ -1,0 +1,12 @@
+{
+  "name": "pixelate-app",
+  "description": "Pixelate any image",
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@polymer/paper-slider": "^3.0.0"
+  },
+  "devDependencies": {
+    "@webcomponents/webcomponentsjs": "^2.0.0",
+    "wct-browser-legacy": "^1.0.0"
+  }
+}
