@@ -1,6 +1,7 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {afterNextRender} from '@polymer/polymer/lib/utils/render-status.js';
 import '@polymer/paper-slider/paper-slider.js';
+import '@polymer/font-roboto-local/roboto.js';
 
 /**
  * @customElement
@@ -12,6 +13,8 @@ class PixelateApp extends PolymerElement {
       <style>
         :host {
           display: block;
+          color: white;
+          font-family: Roboto;
         }
 
         .container {
@@ -22,15 +25,11 @@ class PixelateApp extends PolymerElement {
           width: 100%;
           overflow: hidden;
           background: var(--paper-blue-grey-800);
-          @apply --layout-flex;
         }
 
         #box {
           display: inline-flex;
-          flex-flow: column nowrap;
-          justify-content: center;
-          align-content: center;
-          align-items: center;
+          @apply --layout-vertical;
           position: absolute;
           top: 50%;
           left: 50%;
@@ -39,24 +38,49 @@ class PixelateApp extends PolymerElement {
           transform: translate(-50%, -50%);
         }
 
+        #pixelarea {
+          display: inline-flex;
+          @apply --layout-vertical;
+          justify-content: center;
+          height: 100%;
+        }
+
+        #controls { 
+          display: inline-flex;
+          @apply --layout-horizontal;
+          justify-content: center;
+          width: 100%;
+          margin: 4vh 0 0 0;
+        }
+
         canvas {
+          display: block;
+          margin: 0 auto;
           image-rendering: optimizeSpeed;
           image-rendering: -moz-crisp-edges;
           image-rendering: -o-crisp-edges;
           image-rendering: -webkit-optimize-contrast;
           image-rendering: pixelated;
           -ms-interpolation-mode: nearest-neighbor;
+          background: var(--paper-blue-grey-800);
         }
 
         paper-slider {
-          width: 80vw;
+          width: 60vw;
+          --paper-slider-knob-color: white;
+          --paper-slider-active-color: white;
         }
       </style>
       
       <div class="container">
         <div id="box">
-          <canvas id="canvas"></canvas>
-          <paper-slider min="1" max="100" value="{{size}}" immediate-value="{{size}}" pin></paper-slider>
+          <div id="pixelarea">
+            <canvas id="canvas"></canvas>
+          </div>
+          <div id="controls">
+            <div>Pixelatation: [[__percentage(size)]]%</div>
+            <paper-slider min="1" max="100" value="{{size}}" immediate-value="{{size}}" pin></paper-slider>
+          </div>
         </div>
       </div>
     `;
@@ -76,67 +100,64 @@ class PixelateApp extends PolymerElement {
 
   constructor() {
     super();
-    console.log("constructor called");
-    
+
     this.img.crossOrigin = "anonymous";
-    this.img.src = "images/girl.jpg";
+    this.img.src = "images/fjord.jpg";
 
     this.__resize = this.__resize || function () {
       
-      console.log("resize");
-      let deltaX = this.$.box.offsetWidth / this.img.width;
-      let deltaY = this.$.box.offsetHeight / this.img.height;
+      // fit canvas in pixel area
+      let ratio = this.__calculateAspectRatio(this.img.width, this.img.height, this.$.pixelarea.offsetWidth, this.$.pixelarea.offsetHeight);
+      this.$.canvas.width = ratio.width;
+      this.$.canvas.height = ratio.height;
 
-      let delta = 1;
-      if (deltaX < deltaY) {
-        delta = deltaX;
-      } else {
-        delta = deltaY;
-      }
-      console.log("div width: " + this.$.box.offsetWidth);
-      console.log("div height: " + this.$.box.offsetHeight);
-
-      this.$.canvas.width = this.img.width * delta;
-      this.$.canvas.height = this.img.height * delta;
-
-      console.log("canvas width: " + this.$.canvas.width);
-      console.log("canvas height: " + this.$.canvas.height);
-
-      this.__draw();
+      // re-draw image
+      this.__pixelate();
     }.bind(this);
 
 
     afterNextRender(this, function () {
 
-
+      // draw image on load ...
       let __this = this;
       this.img.onload = function () {  
         __this.__resize();
-        
       }
-
-      this._createPropertyObserver('size', '__draw', true);
-
+      // add event listener
+      this._createPropertyObserver('size', '__pixelate', true);
       window.addEventListener('resize', this.__resize);
     });
   }
 
-  __draw() {
+  __percentage(size) {
+    return 100 - size;
+  }
 
-    console.log("draw ...");
+  __pixelate() {
 
     let ctx = this.$.canvas.getContext('2d');
+    
+    // define scale & ratio 
     let scale = this.size / 100;
-    let w = this.$.canvas.width * scale;
-    let h = this.$.canvas.height * scale;
+    let ratio = this.__calculateAspectRatio(this.img.width, this.img.height, this.$.pixelarea.offsetWidth, this.$.pixelarea.offsetHeight);
+    let width = ratio.width * scale;
+    let height = ratio.height * scale;
 
-    ctx.drawImage(this.img, 0, 0, w, h);
+    // draw scaled image
+    ctx.drawImage(this.img, 0, 0, width, height);
 
+    // draw scaled image on full canvas size
     ctx.msImageSmoothingEnabled = false;
     ctx.mozImageSmoothingEnabled = false;
     ctx.webkitImageSmoothingEnabled = false;
     ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(this.$.canvas, 0, 0, w, h, 0, 0, this.$.canvas.width, this.$.canvas.height); 
+    ctx.drawImage(this.$.canvas, 0, 0, width, height, 0, 0, ratio.width, ratio.height); 
+  }
+
+  __calculateAspectRatio(srcWidth, srcHeight, maxWidth, maxHeight) {
+
+    var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+    return { width: srcWidth * ratio, height: srcHeight * ratio };
   }
 }
 

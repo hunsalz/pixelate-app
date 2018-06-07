@@ -1,4 +1,11 @@
 {
+  "entrypoint": "index.html",
+  "shell": "src/pixelate-app/pixelate-app.js",
+  "sources": [
+    "fonts/**/*",
+    "images/**/*",
+    "src/**/*"
+   ],
   "npm": true,
   "lint": {
     "rules": [

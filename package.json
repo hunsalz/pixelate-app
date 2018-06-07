@@ -2,8 +2,9 @@
   "name": "pixelate-app",
   "description": "Pixelate any image",
   "dependencies": {
-    "@polymer/polymer": "^3.0.0",
-    "@polymer/paper-slider": "^3.0.0"
+    "@polymer/polymer": "3.0.2",
+    "@polymer/paper-slider": "3.0.0-pre.19",
+    "@polymer/font-roboto-local": "3.0.0-pre.19"
   },
   "devDependencies": {
     "@webcomponents/webcomponentsjs": "^2.0.0",
