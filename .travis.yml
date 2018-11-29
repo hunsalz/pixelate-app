@@ -18,8 +18,6 @@ cache:
 install:
   - npm install -g polymer-cli
 script:
-  - source $TRAVIS_BUILD_DIR/travis/build.sh
-  - cd pixelate-app
   - npm install
   - sed -i 's|service-worker.js|pixelate-app/service-worker.js|g' index.html # expand path to match GH-PAGES root dir
   - sed -i 's|src="node_modules|src="pixelate-app/node_modules|g' index.html # expand path to match GH-PAGES root dir
