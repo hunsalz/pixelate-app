@@ -99,7 +99,7 @@ class PixelateApp extends PolymerElement {
 
     // img properties
     // TODO make src dynamic
-    this.img.src = "images/leaf.png";
+    this.img.src = "pixelate-app/images/leaf.png";
     this.img.crossOrigin = "anonymous";
 
     this.__resize = this.__resize || function () {
