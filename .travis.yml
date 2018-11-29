@@ -11,7 +11,7 @@ node_js:
   - "stable"
 stages:
   - deploy
-  - ':deploy it to GH-PAGES'
+  - ':ship it to GitHub Pages'
 cache:
   directories:
     - node_modules
@@ -28,7 +28,7 @@ deploy:
   skip-cleanup: true
   github-token: $GH_PAGES_TOKEN
   keep-history: true
-  local-dir: pixelate-app/build/public
+  local-dir: build/public
   verbose: true
   on:
     branch: master
