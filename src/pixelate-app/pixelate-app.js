@@ -1,12 +1,9 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import {afterNextRender} from '@polymer/polymer/lib/utils/render-status.js';
-import '@polymer/paper-slider/paper-slider.js';
-import '@polymer/font-roboto-local/roboto.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 
-/**
- * @customElement
- * @polymer
- */
+import '@polymer/paper-slider/paper-slider.js';
+import '@polymer/font-roboto/roboto.js';
+
 class PixelateApp extends PolymerElement {
   static get template() {
     return html`
@@ -14,7 +11,6 @@ class PixelateApp extends PolymerElement {
         :host {
           display: block;
           color: white;
-          font-family: Roboto;
         }
 
         .container {
@@ -101,11 +97,13 @@ class PixelateApp extends PolymerElement {
   constructor() {
     super();
 
+    // img properties
+    // TODO make src dynamic
+    this.img.src = "images/leaf.jpg";
     this.img.crossOrigin = "anonymous";
-    this.img.src = "images/fjord.jpg";
 
     this.__resize = this.__resize || function () {
-      
+
       // fit canvas in pixel area
       let ratio = this.__calculateAspectRatio(this.img.width, this.img.height, this.$.pixelarea.offsetWidth, this.$.pixelarea.offsetHeight);
       this.$.canvas.width = ratio.width;
@@ -120,7 +118,7 @@ class PixelateApp extends PolymerElement {
 
       // draw image on load ...
       let __this = this;
-      this.img.onload = function () {  
+      this.img.onload = function () {
         __this.__resize();
       }
       // add event listener
@@ -129,14 +127,21 @@ class PixelateApp extends PolymerElement {
     });
   }
 
+  /**
+   * 
+   * @param {*} size 
+   */
   __percentage(size) {
     return 100 - size;
   }
 
+  /**
+   * 
+   */
   __pixelate() {
 
     let ctx = this.$.canvas.getContext('2d');
-    
+
     // define scale & ratio 
     let scale = this.size / 100;
     let ratio = this.__calculateAspectRatio(this.img.width, this.img.height, this.$.pixelarea.offsetWidth, this.$.pixelarea.offsetHeight);
@@ -151,9 +156,16 @@ class PixelateApp extends PolymerElement {
     ctx.mozImageSmoothingEnabled = false;
     ctx.webkitImageSmoothingEnabled = false;
     ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(this.$.canvas, 0, 0, width, height, 0, 0, ratio.width, ratio.height); 
+    ctx.drawImage(this.$.canvas, 0, 0, width, height, 0, 0, ratio.width, ratio.height);
   }
 
+  /**
+   * 
+   * @param {*} srcWidth 
+   * @param {*} srcHeight 
+   * @param {*} maxWidth 
+   * @param {*} maxHeight 
+   */
   __calculateAspectRatio(srcWidth, srcHeight, maxWidth, maxHeight) {
 
     var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);

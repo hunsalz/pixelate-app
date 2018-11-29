@@ -1,4 +1,4 @@
-/build
-/fonts
-/images
-/node_modules
+**/build/
+/images/*jpg
+**/node_modules
+**/package-lock.json

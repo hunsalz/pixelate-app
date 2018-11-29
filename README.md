@@ -1,33 +1,8 @@
-# \<pixelate-app\>
+# Pixelate-App
 
-Pixelate any image
+[![Build Status](https://travis-ci.org/hunsalz/pixelate-app.svg?branch=master)](https://travis-ci.org/hunsalz/pixelate-app)
+[![License](https://img.shields.io/badge/license-MIT%20License-blue.svg)](http://doge.mit-license.org)
 
-## Install the Polymer-CLI
+## Watch [Pixelate-App ↗](https://hunsalz.github.io/pixelate-app/) live.
 
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your application locally.
-
-## Viewing Your Application
-
-```
-$ polymer serve
-```
-
-## Building Your Application
-
-```
-$ polymer build
-```
-
-This will create builds of your application in the `build/` directory, optimized to be served in production. You can then serve the built versions by giving `polymer serve` a folder to serve from:
-
-```
-$ polymer serve build/default
-```
-
-## Running Tests
-
-```
-$ polymer test
-```
-
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
+Pixelate-App is a [Progressive Web App](https://en.wikipedia.org/wiki/Progressive_web_applications) to pixelate an image.

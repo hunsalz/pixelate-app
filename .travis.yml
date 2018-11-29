@@ -1,0 +1,36 @@
+language: node_js
+node_js:
+  - "10"
+dist: trusty
+sudo: required
+addons:
+  firefox: latest
+  chrome: stable
+node_js:
+  - "node"
+  - "stable"
+stages:
+  - deploy
+  - ':deploy it to GH-PAGES'
+cache:
+  directories:
+    - node_modules
+install:
+  - npm install -g polymer-cli
+script:
+  - source $TRAVIS_BUILD_DIR/travis/build.sh
+  - cd pixelate-app
+  - npm install
+  - sed -i 's|service-worker.js|pixelate-app/service-worker.js|g' index.html # expand path to match GH-PAGES root dir
+  - sed -i 's|src="node_modules|src="pixelate-app/node_modules|g' index.html # expand path to match GH-PAGES root dir
+  - sed -i 's|src="src|src="pixelate-app/src|g' index.html # expand path to match GH-PAGES root dir
+  - polymer build
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GH_PAGES_TOKEN
+  keep-history: true
+  local-dir: pixelate-app/build/public
+  verbose: true
+  on:
+    branch: master
